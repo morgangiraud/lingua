@@ -14,6 +14,8 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
+module load conda
+
 # Start timer
 start_time=$(date +%s)
 
@@ -25,17 +27,19 @@ env_prefix=lingua_$current_date
 
 # Create the conda environment
 
-source $CONDA_ROOT/etc/profile.d/conda.sh
+#source $CONDA_ROOT/etc/profile.d/conda.sh
 conda create -n $env_prefix python=3.11 -y -c anaconda
 conda activate $env_prefix
 
 echo "Currently in env $(which python)"
 
 # Install packages
-pip install torch --index-url https://download.pytorch.org/whl/cu121
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm6.1
 pip install ninja
-pip install git+https://github.com/facebookresearch/xformers.git@d3948b5cb9a3711032a0ef0e036e809c7b08c1e0#egg=xformers
+pip install -U xformers --index-url https://download.pytorch.org/whl/rocm6.1
+# Currently, xformers will downgrade from pytorhc 2.5.* to pytorch 2.4.* which will break the codebase.
 pip install --requirement requirements.txt
+pip uninstall -y pynvml # See https://github.com/Haidra-Org/horde-worker-reGen/commit/229dd72ce31cd5499986364dd12adc3284b47dc9#diff-c6996df53d5f62ca4f9cbb14ddeb813dfab1effa678b1d71b60dbacb72e026fcR43
 
 # End timer
 end_time=$(date +%s)

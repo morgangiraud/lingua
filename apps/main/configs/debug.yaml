@@ -1,6 +1,6 @@
 # Template config, need to change dump_dir, data.root_dir and tokenizer.path
 
-# dump_dir: !!CHANGETHIS!!
+dump_dir: /lus/work/CT10/c1715576/mgiraud/lingua/runs/test
 name: "debug"
 steps: 1000
 probe_freq: 100
@@ -12,7 +12,7 @@ optim:
     clip: 10.0
 
 distributed:
-    fsdp_type: full_shard
+    fsdp_type: no_shard
     compile: true
     model_dtype: bf16
     matmul_allow_tf32: false
@@ -20,22 +20,22 @@ distributed:
     tp_size: 1
 
 model:
-    dim: 1024
-    n_layers: 8
-    n_heads: 8
+    dim: 256
+    n_layers: 2
+    n_heads: 2
 
 data:
-    root_dir: data/shuffled
+    root_dir: /lus/work/shared/dataset/HuggingFaceFW--fineweb/data
     sources:
-        dclm_baseline_1.0: 1.0
-    batch_size: 32
-    prefetch_size: 64
+            CC-MAIN-2014-10: 1.0
+    batch_size: 16
+    prefetch_size: 32
     seq_len: 2048
     n_views: 2
     load_async: true
     tokenizer:
-        name: sp
-        path: tokenizers/tokenizer_final_32k.minus_inf_ws.model
+        name: tiktoken
+        path: /lus/work/CT10/c1715576/mgiraud/lingua/tokenizers/llama.model 
 
 profiling:
     run: true
