@@ -313,3 +313,20 @@ python -m lingua.stool script=apps.main.eval config=apps/main/configs/eval.yaml 
 ## License
 
 Meta Lingua is licensed under BSD-3-Clause license. Refer to the LICENSE file in the top level directory.
+
+
+## Adastra
+Example command:
+```sh
+python -m lingua.stool \
+    script=apps.main.train \
+    config=apps/main/configs/debug.yaml \
+    account=c1715576 \
+    constraint=MI250 \
+    anaconda=/lus/home/CT10/c1715576/mgiraud/.conda/envs/lingua_241021 \
+    nodes=1 \
+    ngpu=1 \
+    ncpu=2 \
+    time=30
+```
+

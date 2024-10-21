@@ -53,7 +53,7 @@ SBATCH_COMMAND = """#!/bin/bash
 #SBATCH --gres=gpu:{ngpus}
 #SBATCH --cpus-per-gpu={ncpu}
 #SBATCH --time={time}
-#SBATCH --partition={partition}
+# #SBATCH --partition={partition}
 #SBATCH --mem={mem}
 
 #SBATCH --output={dump_dir}/logs/%j/%j.stdout
@@ -62,6 +62,15 @@ SBATCH_COMMAND = """#!/bin/bash
 #SBATCH --open-mode=append
 #SBATCH --signal=USR2@120
 #SBATCH --distribution=block
+
+module purge
+
+module load cray-python
+module load rocm/6.0.0
+module load aws-ofi-rccl
+module load conda
+
+module list
 
 # Mimic the effect of "conda init", which doesn't work for scripts
 eval "$({conda_exe} shell.bash hook)"

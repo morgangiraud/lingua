@@ -26,10 +26,11 @@ from torch.distributed._composable.fsdp import MixedPrecisionPolicy, fully_shard
 from torch.distributed.algorithms._checkpoint.checkpoint_wrapper import (
     checkpoint_wrapper,
 )
-from torch.utils.checkpoint import (
-    create_selective_checkpoint_contexts,
-    CheckpointPolicy,
-)
+# Requires pytorch >=2.5.0
+#from torch.utils.checkpoint import (
+#    create_selective_checkpoint_contexts,
+#    CheckpointPolicy,
+#)
 from torch.distributed.device_mesh import DeviceMesh, init_device_mesh
 
 # for no recompute ops
@@ -46,8 +47,9 @@ default_no_recompute_ops = {
     torch.ops.aten._scaled_dot_product_efficient_attention.default,
     torch.ops.aten._scaled_dot_product_flash_attention.default,
     torch.ops.c10d_functional.reduce_scatter_tensor.default,
-    torch.ops.xformers_flash.flash_fwd.default,
-    torch.ops.xformers.efficient_attention_forward_cutlass.default,
+    # Requires pytorch >=2.5.0
+    #torch.ops.xformers_flash.flash_fwd.default,
+    #torch.ops.xformers.efficient_attention_forward_cutlass.default,
 }
 
 
@@ -464,10 +466,11 @@ def parallelize_model(
     if distributed_args.selective_activation_checkpointing:
         model = checkpoint_wrapper(
             model,
-            context_fn=partial(
-                create_selective_checkpoint_contexts,
-                get_default_policy(no_recompute_ops),
-            ),
+            # Requires pytorch >=2.5.0
+            # context_fn=partial(
+            #    create_selective_checkpoint_contexts,
+            #    get_default_policy(no_recompute_ops),
+            #),
         )
 
     if distributed_args.compile:
